@@ -54,20 +54,42 @@ namespace classe_articolo
 
             }
 
-            public void AlimentareONo()
+            public bool AlimentareONo()
             {
                 DialogResult dialogResult = MessageBox.Show("Il suo articolo è alimentare?", "Alimentare / Non Alimentare", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     al = true;
                 }
+                return al;
             }
 
         }
 
         class ArticoloAlimentare : Articolo
         {
+            protected string scadenza;
+            protected bool fr;
 
+            public string Scadenza
+            {
+                get => scadenza;
+                set
+                {
+                    scadenza= value;
+                }
+
+            }
+
+            public bool fresco()
+            {
+                DialogResult dialogResult = MessageBox.Show("Il suo articolo è fresco?", "Fresco", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    fr = true;
+                }
+                return fr;
+            }
         }
 
         class ArticoloNonAlimentare : Articolo
@@ -85,25 +107,51 @@ namespace classe_articolo
 
             }
 
-            
+           
 
         }
 
         class AlimentareFresco : ArticoloAlimentare 
-        { 
+        {
+            protected string giorni;
 
+            public string Giorni
+            {
+                get => giorni;
+                set
+                {
+                   giorni = value;
+                }
+
+            }
         }
 
         Articolo articolo = new Articolo();
+        ArticoloNonAlimentare non= new ArticoloNonAlimentare();
+        ArticoloAlimentare alimentare= new ArticoloAlimentare();
+        AlimentareFresco fresco = new AlimentareFresco();
         double prez;
         private void button1_Click(object sender, EventArgs e)
         {
             articolo.Nome = textBox1.Text;
             articolo.Prezzo = Convert.ToDouble(textBox2.Text);
             prez = articolo.sconto();
-            textBox1.Text = "";
-            textBox2.Text = "";
-            articolo.AlimentareONo();
+            if(articolo.AlimentareONo()==false)
+            {
+                DialogResult dialogResult = MessageBox.Show("Il suo articolo è riciclabile?", "Riciclabile", MessageBoxButtons.YesNo);
+                MessageBox.Show("Inserisci il materiale dell'articolo");
+                non.Materiale= textBox3.Text;
+            }
+            else
+            {
+                MessageBox.Show("Inserisci la data di scadenza dell'articolo");
+                alimentare.Scadenza = textBox4.Text;
+                if(alimentare.fresco()==true)
+                {
+                    MessageBox.Show("Inserisci l'indicazione del numero di giorni entro cui consumare l'articolo");
+                    fresco.Giorni= textBox5.Text;
+                }
+            }
         }
 
     }
