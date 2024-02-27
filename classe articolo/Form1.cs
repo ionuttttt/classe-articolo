@@ -17,6 +17,12 @@ namespace classe_articolo
             InitializeComponent();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
         class Articolo
         {
             protected string nome;
@@ -43,12 +49,23 @@ namespace classe_articolo
 
             }
 
+            public Articolo()
+            {
+
+            }
+
+            public Articolo(string a, double b)
+            {
+                nome = a;
+                prezzo = b;
+            }
+
             public double sconto()
             {
                 DialogResult dialogResult = MessageBox.Show("Ha la carta fedeltà?", "Carta Fedeltà", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    prezzo=(prezzo*5)/100;
+                    prezzo=prezzo-(prezzo*5)/100;
                 }
                 return prezzo;
 
@@ -80,7 +97,15 @@ namespace classe_articolo
                 }
 
             }
+             
+            public ArticoloAlimentare()
+            {
 
+            }
+            public ArticoloAlimentare(string a, double b,string c,bool d):base(a,b)
+            {
+                nome=a; prezzo=b; scadenza=c; fr=d;
+            }
 
             public bool fresco()
             {
@@ -98,7 +123,7 @@ namespace classe_articolo
                 int anno= thisYear.Year;
                 if(anno==int.Parse(scadenza))
                 {
-                    prezzo = (prezzo *20) /100;
+                    prezzo = prezzo-(prezzo *20) /100;
                 }
                 return prezzo;
             }
@@ -119,9 +144,18 @@ namespace classe_articolo
 
             }
 
+            public ArticoloNonAlimentare()
+            { 
+            }
+
+            public ArticoloNonAlimentare(string a, double b,string c,bool d):base(a,b)
+            {
+                nome = a; prezzo = b; materiale = c; riciclabiler = d;
+            }
+
             public double scontoNON(double prezzo)
             {
-                prezzo=(prezzo *10) /100;
+                prezzo=prezzo-(prezzo *10) /100;
                 return prezzo;
             }
            
@@ -142,26 +176,44 @@ namespace classe_articolo
 
             }
 
+            public AlimentareFresco()
+            {
+
+            }
+            public AlimentareFresco(string a, double b,string c,bool d, string e) : base(a,b,c,d)
+            {
+                nome = a; prezzo = b; scadenza = c;fr = d;giorni = e;
+            }
+
             public double scontoFR(double prezzo)
             {
                 switch(int.Parse(giorni))
                 {
-                    case 1: prezzo = (prezzo * 10) / 100;break;
-                    case 2: prezzo = (prezzo*8) / 100;break;
-                    case 3: prezzo = (prezzo * 6) / 100; break;
-                    case 4: prezzo = (prezzo * 4) / 100; break;
-                    case 5: prezzo = (prezzo * 2) / 100; break;
+                    case 1: prezzo = prezzo - (prezzo * 10) / 100; break;
+                    case 2: prezzo = prezzo-(prezzo*8) / 100; break;
+                    case 3: prezzo = prezzo - (prezzo * 6) / 100; break;
+                    case 4: prezzo = prezzo-(prezzo * 4) / 100; break;
+                    case 5: prezzo = prezzo - (prezzo * 2) / 100; break;
                 }
                 return prezzo;
             }
         }
 
-        Articolo articolo = new Articolo();
-        ArticoloNonAlimentare non= new ArticoloNonAlimentare();
-        ArticoloAlimentare alimentare= new ArticoloAlimentare();
-        AlimentareFresco fresco = new AlimentareFresco();
-        double prez;
+        double prez = 0;
         bool fr, al;
+        Articolo articolo = new Articolo();
+        ArticoloNonAlimentare non = new ArticoloNonAlimentare();
+        ArticoloAlimentare alimentare = new ArticoloAlimentare();
+        AlimentareFresco fresco = new AlimentareFresco();
+        List<Articolo> ticolo = new List<Articolo>();
+
+        public string scontrino()
+        {
+            string scontrino;
+            scontrino= articolo.Nome+"     "+Convert.ToString(prez);
+            return scontrino;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if(articolo.AlimentareONo()==false)
@@ -219,6 +271,9 @@ namespace classe_articolo
             }
             textBox1.Text = ""; 
             textBox2.Text = "";
+
+            listBox1.Items.Add(scontrino());
         }
+
     }
 }
